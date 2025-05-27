@@ -1,76 +1,63 @@
-# Tacotron with Tensorflow 2.0
-Implementation of tacotron (TTS) with Tensorflow 2.0.0 heavily inspired by: </br>
+# Tacotron-Implementation-With-Tensorflow
 
-General structure of algorithm: https://github.com/Kyubyong/tacotron </br>
-Training in Korean: https://github.com/hccho2/Tacotron2-Wavenet-Korean-TTS </br>
-Attention: https://www.tensorflow.org/tutorials/text/nmt_with_attention </br>
+An implementation of Tacotron (Text-to-Speech) using Tensorflow 2.0.0, significantly influenced by the following works:
 
-Notice that I haven't used tensorflow_addon library since it doesn't seem to be fully compatible with Tensorflow >= 2.0.0. </br>
-Also, I added an option to choose between regular and monotonic attention since monotonic attention shows faster convergences in both language cases. For more information about monotonic attention, visit https://arxiv.org/abs/1704.00784 or https://vimeo.com/240608543 if you prefer presentation </br>
+General algorithmic structure: [https://github.com/Kyubyong/tacotron](https://github.com/Kyubyong/tacotron)
+Korean language training: [https://github.com/hccho2/Tacotron2-Wavenet-Korean-TTS](https://github.com/hccho2/Tacotron2-Wavenet-Korean-TTS)
+Attention mechanism: [https://www.tensorflow.org/tutorials/text/nmt_with_attention](https://www.tensorflow.org/tutorials/text/nmt_with_attention)
+Please note that I have avoided using the `tensorflow_addon` library as it does not appear to be fully compatible with Tensorflow versions >= 2.0.0.
+Additionally, I've included an option to select between standard and monotonic attention, because monotonic attention demonstrates quicker convergence for both languages.
 
-## Requirements
-* Python=3.7
-* tensorflow-gpu >= 2.0.0
-* librosa
-* tqdm
-* matplotlib
-* jamo
-* unidecode
-* inflect
+## Prerequisites
 
-## Data
-For English, I've used LJSpeech 1.1 dataset (https://keithito.com/LJ-Speech-Dataset/). </br>
-For Korean, I've used KSS dataset (https://www.kaggle.com/bryanpark/korean-single-speaker-speech-dataset). </br>
+- Python=3.7
+- tensorflow-gpu >= 2.0.0
+- librosa
+- tqdm
+- matplotlib
+- jamo
+- unidecode
+- inflect
 
-## Training
+## Datasets
 
-First, set your parameters (including directory, language, etc) in hyperparams.py. For generating examples, I set "use_monotonic" and "normalize_attention" parameter as True. </br>
-Then, you can just run training.py file as follows: </br>
-<pre>
-<code> 
-python training.py 
-</code>
-</pre>
+For English, the LJSpeech 1.1 dataset was utilized ([https://keithito.com/LJ-Speech-Dataset/](https://keithito.com/LJ-Speech-Dataset/)).
+For Korean, the KSS dataset was employed ([https://www.kaggle.com/bryanpark/korean-single-speaker-speech-dataset](https://www.kaggle.com/bryanpark/korean-single-speaker-speech-dataset)).
 
-## Result
-To show some example results, I trained with both English and Korean dataset applying Bahdanau monotonic attention with normalization.
-Results of training English data (LJSpeech) are given below: </br>
-![Alt Text](https://github.com/dabsdamoon/gif_save/blob/master/tacotron_English.gif) </br>
-![Alt Text](https://github.com/dabsdamoon/gif_save/blob/master/tacotron_English_mel.png)
-![Alt Text](https://github.com/dabsdamoon/gif_save/blob/master/tacotron_English_linear.png) </br>
-</br>
+## Training Process
 
-Results of training Korean data (KSS) are given below: </br>
-![Alt Text](https://github.com/dabsdamoon/gif_save/blob/master/tacotron_Korean.gif) </br>
-![Alt Text](https://github.com/dabsdamoon/gif_save/blob/master/tacotron_Korean_mel.png)
-![Alt Text](https://github.com/dabsdamoon/gif_save/blob/master/tacotron_Korean_linear.png) </br>
+First, configure your parameters (including directories, language settings, etc.) in `hyperparams.py`. For generating sample outputs, I have set the "use_monotonic" and "normalize_attention" parameters to `True`.
+Then, you can initiate the training by running the `training.py` file as shown below:
 
-Both algorithms have been trained for roughly 15 hours.
+```bash
+python training.py
+```
 
-## Sample Synthesis
+## Outcomes
 
-First, set your parameters in hyperparams.py. Note that you need to set "use_monotonic" and "normalize_attention" parameter as True if you have trained the algorithm in such way. Then, use the function "synthesizing" to generate the sentence you want. </br>
+To demonstrate some sample results, I trained the model with both English and Korean datasets, applying Bahdanau monotonic attention with normalization.
+Outcomes from training with English data (LJSpeech) are presented below:
 
-<pre>
-<code>
+Outcomes from training with Korean data (KSS) are presented below:
+Both models were trained for approximately 15 hours.
+
+## Sample Generation
+
+Initially, set your parameters within `hyperparams.py`. Note that you must set the "use_monotonic" and "normalize_attention" parameters to `True` if the model was trained in that configuration. Then, utilize the "synthesizing" function to generate the desired sentence. <br>
+
 synthesizing("The boy was there when the sun rose", hp)
-synthesizing("오늘 점심은 쌀국수 한그릇 먹고싶네요", hp)
-</code>
-</pre>
+synthesizing(hp)
 
-Finally, run synthesizing.py with console command:
+Finally, execute `synthesizing.py` using a console command:
 
-<pre>
-<code> 
-python synthesizing.py 
-</code>
-</pre>
+```bash
+python synthesizing.py
+```
 
-For audio samples, I uploaded synthesized English sentence of "The boy was there when the sun rose" and Korean sentence of "오늘 점심은 쌀국수 한그릇 먹고싶네요" in a folder "sample_synthesis". The algorithm has been trained 77000 steps for English (roughly 40 hours), and 67000 steps for Korean (roughly 15 hours). </br> 
+For audio examples, I have uploaded a synthesized English sentence, "The boy was there when the sun rose," and a Korean sentence, into a folder named "sample_synthesis". The model was trained for 77,000 steps for English (around 40 hours) and 67,000 steps for Korean (around 15 hours).
 
-## Notes
-* Although I tried to convert Kyubyoung's Tensorflow 1.12 code to Tensorflow 2.0 code as it is, there may be some differences between mine and Kyubyoung's. I'd appreciate if you notice differences and inform me. Also, since I directly implemented Kyubyoung's code, differences from the original paper are also implemented.
-* As I have mentioned earlier, training Korean dataset takes quite less time than training English dataset. Thus, if you can understand both languages, you may notice that Korean synthesizing result sounds better than English one. The English result will be better if you spend more time on training.
-* Any comments on improving codes or questions are welcome, but it may take some time for me to respond.
+## Additional Remarks
 
-April 2020, Dabin Moon
+- Although I endeavored to convert Kyubyoung's Tensorflow 1.12 code to Tensorflow 2.0 code as accurately as possible, some discrepancies might exist between my version and Kyubyoung's. I would appreciate it if you notice any differences and inform me. Also, since I directly implemented Kyubyoung's code, any deviations from the original paper present in that code are also reflected here.
+- As mentioned previously, training the Korean dataset requires considerably less time than training the English dataset. Consequently, if you understand both languages, you might find that the Korean synthesized results sound superior to the English ones. The English results would likely improve with additional training time.
+- Any suggestions for improving the code or questions are welcome, though it may take some time for me to provide a response.
